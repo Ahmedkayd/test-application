@@ -30,26 +30,26 @@ jobs:
         run: |
           docker push ${{inputs.REPO}}:${{ inputs.LATEST_IMAGE }}
 
-      - name: Update Kubernetes manifest with new image tag
-        run: |
-          set -e
-          FILE="kubernetes/deployment.yaml"
-          IMAGE_LINE_BEFORE=$(grep -E '^\s*image:' "$FILE" || true)
+      # - name: Update Kubernetes manifest with new image tag
+      #   run: |
+      #     set -e
+      #     FILE="kubernetes/deployment.yaml"
+      #     IMAGE_LINE_BEFORE=$(grep -E '^\s*image:' "$FILE" || true)
 
-          echo "Before update: $IMAGE_LINE_BEFORE"
+      #     echo "Before update: $IMAGE_LINE_BEFORE"
 
-          sed -i -E "s|^[[:space:]]*image:[[:space:]]*.*|  image: ${{inputs.REPO}}:${{ inputs.LATEST_IMAGE}}|" "$FILE"
+      #     sed -i -E "s|^[[:space:]]*image:[[:space:]]*.*|  image: ${{inputs.REPO}}:${{ inputs.LATEST_IMAGE}}|" "$FILE"
 
-          IMAGE_LINE_AFTER=$(grep -E '^\s*image:' "$FILE" || true)
-          echo "After update: $IMAGE_LINE_AFTER"
+      #     IMAGE_LINE_AFTER=$(grep -E '^\s*image:' "$FILE" || true)
+      #     echo "After update: $IMAGE_LINE_AFTER"
 
-          if [ "$IMAGE_LINE_BEFORE" = "$IMAGE_LINE_AFTER" ]; then
-            echo "No image line was updated. Check regex or file path."
-            exit 1
-          fi
+      #     if [ "$IMAGE_LINE_BEFORE" = "$IMAGE_LINE_AFTER" ]; then
+      #       echo "No image line was updated. Check regex or file path."
+      #       exit 1
+      #     fi
 
-          echo "Image line updated in $FILE"
-          cat "$FILE"
+      #     echo "Image line updated in $FILE"
+      #     cat "$FILE"
       # - name: Commit and push changes
       #   run: |
       #     set -e
