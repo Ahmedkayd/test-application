@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-app
+  namespace: sahaluniv
+  labels:
+    app: data-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: data-app
+  template:
+    metadata:
+      labels:
+        app: data-app
+    spec:
+      containers:
+        - name: data-app
+          image: ahismail/data-app:2025-10-08-50734b3-1
+          ports:
+            - containerPort: 8501

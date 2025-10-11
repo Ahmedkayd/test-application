@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: flask-app-applicationset
+  namespace: argocd
+spec:
+  generators:
+    - git:
+        repoURL: 'https://github.com/Ahmedkayd/test-application.git'
+        revision: main
+        directories:
+          - path: k8s
+  template:
+    metadata:
+      name: '{{path.basename}}'
+    spec:
+      project: default
+      source:
+        repoURL: 'https://github.com/Ahmedkayd/test-application.git'
+        targetRevision: develop
+        path: k8s
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: default
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true

@@ -1,0 +1,30 @@
+name: Docker Image Build
+
+on:
+  workflow_call:
+    outputs:  
+      LATEST_IMAGE:
+        description: "The latest Docker image tag"
+        value: ${{ jobs.docker-build.outputs.LATEST_IMAGE }}
+
+jobs:
+  docker-build:
+    runs-on: self-hosted
+    outputs:
+      LATEST_IMAGE: ${{ steps.build.outputs.LATEST_IMAGE }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set short Git commit SHA
+        run: echo "TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Make dockerbuild.sh executable
+        run: chmod +x ./dockerbuild.sh
+
+      - name: Build Docker Image
+        id: build
+        run: |
+          IMAGE_TAG=$(./dockerbuild.sh)  
+          echo "LATEST_IMAGE=$IMAGE_TAG" >> "$GITHUB_OUTPUT"  
+          echo "Built image with tag: $IMAGE_TAG" 
