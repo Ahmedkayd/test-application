@@ -12,7 +12,7 @@ on:
     outputs:  
       LATEST_IMAGE:
         description: "The latest Docker image tag"
-        value: ${{ jobs.docker-build.outputs.LATEST_IMAGE }}
+        value: ${{ jobs.docker-push.outputs.LATEST_IMAGE }}
 jobs:
   docker-push:
     runs-on: self-hosted
