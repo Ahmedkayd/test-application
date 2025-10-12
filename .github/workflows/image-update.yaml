@@ -21,8 +21,8 @@ jobs:
         run: |
           set -e
           FILE="k8s/deployment.yaml"
-          IMAGE_TAG=$(echo '${{ inputs.LATEST_IMAGE }}' | xargs)
-          REPO="ahismail/test-app"
+          IMAGE_TAG=${{ inputs.LATEST_IMAGE }}
+          REPO= $ {{ inputs.REPO }}
           echo "imageTag: $IMAGE_TAG"
 
           IMAGE_LINE_BEFORE=$(grep -E '^\s*image:' "$FILE" || true)
