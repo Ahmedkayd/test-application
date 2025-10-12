@@ -24,3 +24,4 @@ jobs:
     needs: docker-push
     with:
       LATEST_IMAGE: ${{ needs.docker-push.outputs.LATEST_IMAGE }}
+      REPO: "ahismail/test-app"
