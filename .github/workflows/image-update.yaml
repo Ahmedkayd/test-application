@@ -16,11 +16,12 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
       - name: Update Kubernetes manifest with new image tag
         run: |
           set -e
           FILE="k8s/deployment.yaml"
-          REPO=""${{ inputs.REPO }}"
+          REPO="${{ inputs.REPO }}"
           IMAGE_TAG="${{ inputs.LATEST_IMAGE }}"
           IMAGE_TAG=$(echo "$IMAGE_TAG" | xargs)  
           echo "Updating image to ${REPO}:${IMAGE_TAG} in $FILE"
