@@ -9,7 +9,10 @@ on:
       REPO:
         required: true
         type: string
-
+    outputs:  
+      LATEST_IMAGE:
+        description: "The latest Docker image tag"
+        value: ${{ jobs.docker-build.outputs.LATEST_IMAGE }}
 jobs:
   docker-push:
     runs-on: self-hosted
@@ -26,16 +29,16 @@ jobs:
       - name: Verify Docker Image exists 
         run: |
           echo "Looking for image: ${{inputs.REPO}}:${{ inputs.LATEST_IMAGE }}"  
-          docker images
+          docker images | grep ${{inputs.REPO}}:${{ inputs.LATEST_IMAGE }}
 
       - name: Push Docker Image
         run: |
           docker push ${{inputs.REPO}}:${{ inputs.LATEST_IMAGE }}
           echo "Pushed image with tag:" ${{ inputs.LATEST_IMAGE }} 
-      - name: Set Docker tag output
-        id: set-tag
-        run: |
-          echo "LATEST_IMAGE=${{ inputs.LATEST_IMAGE }}" >> $GITHUB_OUTPUT
+      # - name: Set Docker tag output
+      #   id: set-tag
+      #   run: |
+      #     echo "LATEST_IMAGE=${{ inputs.LATEST_IMAGE }}" >> $GITHUB_OUTPUT
 
       # - name: Update Kubernetes manifest with new image tag
       #   run: |
