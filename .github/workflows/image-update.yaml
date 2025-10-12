@@ -41,17 +41,18 @@ jobs:
           echo "Image line updated in $FILE"
           cat "$FILE"
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "Update image tag to ${{ inputs.LATEST_IMAGE }}"
-          title: "chore: Update image tag to ${{ inputs.LATEST_IMAGE }}"
-          body: |
-            ## Image Update
-            
-            Updated Kubernetes deployment image to: `${{ inputs.REPO }}:${{ inputs.LATEST_IMAGE }}`
-            
-            **File changed:** `k8s/deployment.yaml`
-          branch: "update-image-${{ inputs.LATEST_IMAGE }}"
-          delete-branch: true
+      - name: Configure Git
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions[bot]"
+
+      - name: Commit and Push
+        run: |
+          set -e
+          git add k8s/deployment.yaml
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Update image tag to ${{ inputs.LATEST_IMAGE }}"
+            git push
+          fi
