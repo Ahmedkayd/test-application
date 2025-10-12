@@ -22,7 +22,7 @@ jobs:
           set -e
           FILE="k8s/deployment.yaml"
           IMAGE_TAG=${{ inputs.LATEST_IMAGE }}
-          REPO= $ {{ inputs.REPO }}
+          REPO=${{ inputs.REPO }}
           echo "imageTag: $IMAGE_TAG"
 
           IMAGE_LINE_BEFORE=$(grep -E '^\s*image:' "$FILE" || true)
