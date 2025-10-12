@@ -35,7 +35,7 @@ jobs:
       - name: Set Docker tag output
         id: set-tag
         run: |
-          echo "LATEST_IMAGE=${{ inputs.LATEST_IMAGE }}" >> "$GITHUB_OUTPUT"
+          echo "LATEST_IMAGE=${{ inputs.LATEST_IMAGE }}" >> $GITHUB_OUTPUT
 
       # - name: Update Kubernetes manifest with new image tag
       #   run: |
