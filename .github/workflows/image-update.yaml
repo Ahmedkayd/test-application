@@ -6,6 +6,9 @@ on:
       LATEST_IMAGE:
         required: true
         type: string
+      REPO:
+        required: true
+        type: string
 
 jobs:
   update-tagversion:
@@ -13,35 +16,21 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-
       - name: Update Kubernetes manifest with new image tag
         run: |
           set -e
           FILE="k8s/deployment.yaml"
-          REPO="ahismail/test-app"
-          IMAGE_TAG="${{ inputs.LATEST_IMAGE }}"  # GitHub Actions expands this
+          REPO=""${{ inputs.REPO }}"
+          IMAGE_TAG="${{ inputs.LATEST_IMAGE }}"
+          IMAGE_TAG=$(echo "$IMAGE_TAG" | xargs)  
+          echo "Updating image to ${REPO}:${IMAGE_TAG} in $FILE"
 
-          # Trim any leading/trailing whitespace just in case
-          IMAGE_TAG=$(echo "$IMAGE_TAG" | xargs)
-
-          # Capture current image line for logging
-          IMAGE_LINE_BEFORE=$(grep -E '^\s*image:' "$FILE" || true)
-          echo "Before update: $IMAGE_LINE_BEFORE"
-
-          # Replace image line, preserve indentation
-          sed -i -E "s|^([[:space:]]*image:).*|\1 ${REPO}:${IMAGE_TAG}|" "$FILE"
-
-          IMAGE_LINE_AFTER=$(grep -E '^\s*image:' "$FILE" || true)
-          echo "After update: $IMAGE_LINE_AFTER"
-
-          if [ "$IMAGE_LINE_BEFORE" = "$IMAGE_LINE_AFTER" ]; then
-            echo "No image line was updated. Check regex or file path."
-            exit 1
+          # Detect OS for sed
+          if [[ "$RUNNER_OS" == "macOS" ]]; then
+            sed -i '' -E "s|^([[:space:]]*image:).*|\1 ${REPO}:${IMAGE_TAG}|" "$FILE"
+          else
+            sed -i -E "s|^([[:space:]]*image:).*|\1 ${REPO}:${IMAGE_TAG}|" "$FILE"
           fi
 
-          echo "Image line updated in $FILE"
-          cat "$FILE"
-
-
-                echo "Image line updated in $FILE"
-                cat "$FILE"
+          echo "Updated image line:"
+          grep -E '^\s*image:' "$FILE"

@@ -23,5 +23,4 @@ jobs:
     uses: ./.github/workflows/image-update.yaml
     needs: docker-push
     with:
-      LATEST_IMAGE: ${{ needs.docker-build.outputs.LATEST_IMAGE }}
-    secrets: inherit
+      LATEST_IMAGE: ${{ needs.docker-push.outputs.LATEST_IMAGE }}
