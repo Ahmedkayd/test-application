@@ -19,7 +19,6 @@ jobs:
           set -e
           FILE="k8s/deployment.yaml"
           IMAGE_TAG="${{ inputs.LATEST_IMAGE }}"
-          REPO="${{ inputs.REPO }}"
 
           # Capture current image line for logging
           IMAGE_LINE_BEFORE=$(grep -E '^\s*image:' "$FILE" || true)

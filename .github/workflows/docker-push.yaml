@@ -31,7 +31,7 @@ jobs:
       - name: Push Docker Image
         run: |
           docker push ${{inputs.REPO}}:${{ inputs.LATEST_IMAGE }}
-          echo "LATEST_IMAGE=${{ inputs.LATEST_IMAGE }} >> "$GITHUB_OUTPUT"  
+          echo "LATEST_IMAGE=${{ inputs.LATEST_IMAGE }}" >> "$GITHUB_OUTPUT"  
           echo "Pushed image with tag: $LATEST_IMAGE"  
       # - name: Update Kubernetes manifest with new image tag
       #   run: |
