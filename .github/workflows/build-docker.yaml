@@ -9,7 +9,7 @@ on:
 
 jobs:
   docker-build:
-    runs-on: self-hosted
+    runs-on: ubuntu:latest
     outputs:
       LATEST_IMAGE: ${{ steps.build.outputs.LATEST_IMAGE }}
     steps:

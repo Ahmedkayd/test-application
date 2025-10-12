@@ -6,7 +6,7 @@ import numpy as np
 
 # Set up the page layout and title
 st.set_page_config(page_title="Data Visualization App", layout="wide")
-st.title("Interactive Data Visualization")
+st.title("Interactive Data Visualization(MJ DEMO)")
 
 # Sidebar for User Input
 st.sidebar.header("User Inputs")
