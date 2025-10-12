@@ -25,5 +25,3 @@ jobs:
     with:
       LATEST_IMAGE: ${{ needs.docker-build.outputs.LATEST_IMAGE }}
     secrets: inherit
-
-  
