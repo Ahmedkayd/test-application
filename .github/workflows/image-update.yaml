@@ -44,6 +44,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "Update image tag to ${{ inputs.LATEST_IMAGE }}"
           title: "chore: Update image tag to ${{ inputs.LATEST_IMAGE }}"
           body: |
