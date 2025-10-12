@@ -1,0 +1,56 @@
+name: TagVersion updater
+
+on:
+  workflow_call:
+    inputs:
+      LATEST_IMAGE:
+        required: true
+        type: string
+      REPO:
+        required: true
+        type: string
+
+jobs:
+  update-tagversion:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Update Kubernetes manifest with new image tag
+        run: |
+          set -e
+          FILE="k8s/deployment.yaml"
+          IMAGE_TAG=${{ inputs.LATEST_IMAGE }}
+          REPO=${{ inputs.REPO }}
+          echo "imageTag: $IMAGE_TAG"
+          IMAGE_LINE_BEFORE=$(grep -E '^\s*image:' "$FILE" || true)
+          echo "Before update: $IMAGE_LINE_BEFORE"
+          # Replace only the value after "image:", preserve indentation
+          if [[ "$RUNNER_OS" == "macOS" ]]; then
+            sed -i '' -E "s|^([[:space:]]*image:).*|\1 ${REPO}:${IMAGE_TAG}|" "$FILE"
+          else
+            sed -i -E "s|^([[:space:]]*image:).*|\1 ${REPO}:${IMAGE_TAG}|" "$FILE"
+          fi
+          IMAGE_LINE_AFTER=$(grep -E '^\s*image:' "$FILE" || true)
+          echo "After update: $IMAGE_LINE_AFTER"
+          if [ "$IMAGE_LINE_BEFORE" = "$IMAGE_LINE_AFTER" ]; then
+            echo "No image line was updated. Check regex or file path."
+            exit 1
+          fi
+          echo "Image line updated in $FILE"
+          cat "$FILE"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: "Update image tag to ${{ inputs.LATEST_IMAGE }}"
+          title: "chore: Update image tag to ${{ inputs.LATEST_IMAGE }}"
+          body: |
+            ## Image Update
+            
+            Updated Kubernetes deployment image to: `${{ inputs.REPO }}:${{ inputs.LATEST_IMAGE }}`
+            
+            **File changed:** `k8s/deployment.yaml`
+          branch: "update-image-${{ inputs.LATEST_IMAGE }}"
+          delete-branch: true
