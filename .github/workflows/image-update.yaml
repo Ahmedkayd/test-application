@@ -1,0 +1,44 @@
+name: TagVersion updater
+
+on:
+  workflow_call:
+    inputs:
+      LATEST_IMAGE:
+        required: true
+        type: string
+
+jobs:
+  update-tagversion:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Update Kubernetes manifest with new image tag
+        run: |
+          set -e
+          FILE="kubernetes/deployment.yaml"
+          IMAGE_TAG="${{ inputs.LATEST_IMAGE }}"
+          REPO="${{ inputs.REPO }}"
+
+          # Capture current image line for logging
+          IMAGE_LINE_BEFORE=$(grep -E '^\s*image:' "$FILE" || true)
+          echo "Before update: $IMAGE_LINE_BEFORE"
+
+          # Use sed to preserve leading whitespace
+          if [[ "$RUNNER_OS" == "macOS" ]]; then
+            sed -i '' -E "s|^([[:space:]]*image:).*|\1 ${REPO}:${IMAGE_TAG}|" "$FILE"
+          else
+            sed -i -E "s|^([[:space:]]*image:).*|\1 ${REPO}:${IMAGE_TAG}|" "$FILE"
+          fi
+
+          IMAGE_LINE_AFTER=$(grep -E '^\s*image:' "$FILE" || true)
+          echo "After update: $IMAGE_LINE_AFTER"
+
+          if [ "$IMAGE_LINE_BEFORE" = "$IMAGE_LINE_AFTER" ]; then
+            echo "No image line was updated. Check regex or file path."
+            exit 1
+          fi
+
+          echo "Image line updated in $FILE"
+          cat "$FILE"

@@ -19,5 +19,11 @@ jobs:
       LATEST_IMAGE: ${{ needs.docker-build.outputs.LATEST_IMAGE }}
       REPO: "ahismail/test-app"
     secrets: inherit
+  image-updater:
+    uses: ./.github/workflows/image-update.yaml
+    needs: docker-build
+    with:
+      LATEST_IMAGE: ${{ needs.docker-build.outputs.LATEST_IMAGE }}
+    secrets: inherit
 
   
