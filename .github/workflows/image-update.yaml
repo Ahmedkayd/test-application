@@ -21,17 +21,27 @@ jobs:
         run: |
           set -e
           FILE="k8s/deployment.yaml"
-          REPO="${{ inputs.REPO }}"
-          IMAGE_TAG="${{ inputs.LATEST_IMAGE }}"
-          IMAGE_TAG=$(echo "$IMAGE_TAG" | xargs)  
-          echo "Updating image to ${REPO}:${IMAGE_TAG} in $FILE"
+          IMAGE_TAG=$(echo '${{ inputs.LATEST_IMAGE }}' | xargs)
+          REPO="ahismail/test-app"
 
-          # Detect OS for sed
+          IMAGE_LINE_BEFORE=$(grep -E '^\s*image:' "$FILE" || true)
+          echo "Before update: $IMAGE_LINE_BEFORE"
+
+          # Replace only the value after "image:", preserve indentation
           if [[ "$RUNNER_OS" == "macOS" ]]; then
             sed -i '' -E "s|^([[:space:]]*image:).*|\1 ${REPO}:${IMAGE_TAG}|" "$FILE"
           else
             sed -i -E "s|^([[:space:]]*image:).*|\1 ${REPO}:${IMAGE_TAG}|" "$FILE"
           fi
 
-          echo "Updated image line:"
-          grep -E '^\s*image:' "$FILE"
+          IMAGE_LINE_AFTER=$(grep -E '^\s*image:' "$FILE" || true)
+          echo "After update: $IMAGE_LINE_AFTER"
+
+          if [ "$IMAGE_LINE_BEFORE" = "$IMAGE_LINE_AFTER" ]; then
+            echo "No image line was updated. Check regex or file path."
+            exit 1
+          fi
+
+          echo "Image line updated in $FILE"
+          cat "$FILE"
+
