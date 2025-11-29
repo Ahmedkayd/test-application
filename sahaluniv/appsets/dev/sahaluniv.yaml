@@ -9,7 +9,7 @@ spec:
         repoURL: 'https://github.com/Ahmedkayd/test-application.git'
         revision: main
         directories:
-          - path: sahaluniv
+          - path: sahaluniv/deploy
   template:
     metadata:
       name: '{{path.basename}}'
