@@ -20,7 +20,7 @@ jobs:
       - name: Update Kubernetes manifest with new image tag
         run: |
           set -e
-          FILE="k8s/deployment.yaml"
+          FILE="sahaluniv/deployment.yaml"
           IMAGE_TAG=${{ inputs.LATEST_IMAGE }}
           REPO=${{ inputs.REPO }}
           echo "imageTag: $IMAGE_TAG"
