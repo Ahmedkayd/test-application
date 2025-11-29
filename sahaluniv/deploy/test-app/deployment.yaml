@@ -21,6 +21,6 @@ spec:
     spec:
       containers:
         - name: data-app
-          image: ahismail/test-app:2025-11-29-762709f-1
+          image: ahismail/test-app:2025-11-29-c0b0373-1
           ports:
             - containerPort: 8501
