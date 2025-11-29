@@ -12,7 +12,7 @@ spec:
           - path: sahaluniv/deploy
   template:
     metadata:
-      name: '{{path}}'
+      name: '{{path.basename}}'
     spec:
       project: sahaluniv
       source:
