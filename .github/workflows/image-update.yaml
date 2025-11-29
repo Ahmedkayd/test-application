@@ -20,7 +20,7 @@ jobs:
       - name: Update Kubernetes manifest with new image tag
         run: |
           set -e
-          FILE="sahaluniv/deploy/deployment.yaml"
+          FILE="sahaluniv/deploy/test-app/deployment.yaml"
           IMAGE_TAG=${{ inputs.LATEST_IMAGE }}
           REPO=${{ inputs.REPO }}
           echo "imageTag: $IMAGE_TAG"
@@ -49,7 +49,7 @@ jobs:
       - name: Commit and Push
         run: |
           set -e
-          git add sahaluniv/deploy/deployment.yaml
+          git add sahaluniv/deploy/test-app/deployment.yaml
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else

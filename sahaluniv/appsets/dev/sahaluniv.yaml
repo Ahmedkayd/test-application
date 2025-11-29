@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: sahal-test-app-applicationset
-  namespace: sahaluniv
+  namespace: argocd
 spec:
   generators:
     - git:
@@ -12,7 +12,7 @@ spec:
           - path: sahaluniv/deploy
   template:
     metadata:
-      name: '{{path.basename}}'
+      name: '{{path}}'
     spec:
       project: sahaluniv
       source:
