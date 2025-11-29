@@ -18,7 +18,7 @@ spec:
       source:
         repoURL: 'https://github.com/Ahmedkayd/test-application.git'
         targetRevision: main
-        path: '{{path}}'
+        path: '{{path.basename}}'
       destination:
         server: 'https://kubernetes.default.svc'
         namespace: sahaluniv
