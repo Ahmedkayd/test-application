@@ -9,7 +9,7 @@ spec:
         repoURL: 'https://github.com/Ahmedkayd/test-application.git'
         revision: main
         directories:
-          - path: k8s
+          - path: sahaluniv
   template:
     metadata:
       name: '{{path.basename}}'
@@ -18,7 +18,7 @@ spec:
       source:
         repoURL: 'https://github.com/Ahmedkayd/test-application.git'
         targetRevision: main
-        path: k8s
+        path: sahaluniv
       destination:
         server: 'https://kubernetes.default.svc'
         namespace: sahaluniv
