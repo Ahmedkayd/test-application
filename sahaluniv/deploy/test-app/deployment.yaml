@@ -5,6 +5,7 @@ metadata:
   namespace: sahaluniv
   labels:
     app: data-app
+    company: kaydsystems
 spec:
   replicas: 2
   selector:
@@ -14,7 +15,6 @@ spec:
     metadata:
       labels:
         app: data-app
-        company: Kaydsystems
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8501"
