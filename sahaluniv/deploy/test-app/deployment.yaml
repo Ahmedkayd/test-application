@@ -14,7 +14,7 @@ spec:
     metadata:
       labels:
         app: data-app
-        company: kaydsystems
+        company: Kaydsystems
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8501"
