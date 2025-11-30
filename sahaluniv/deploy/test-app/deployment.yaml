@@ -5,7 +5,6 @@ metadata:
   namespace: sahaluniv
   labels:
     app: data-app
-    company: kaydsystems
 spec:
   replicas: 2
   selector:
